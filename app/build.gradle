@@ -1,17 +1,11 @@
-<file_path>
-autoreplyapp/app/build.gradle
-</file_path>
-
-<edit_description>
-Update build.gradle to properly use Compose BOM and fix dependencies
-</edit_description>
-
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'org.jlleitschuh.gradle.ktlint'
+    id 'io.gitlab.arturbosch.detekt'
 }
 
 android {
@@ -49,7 +43,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.5.15'
+        kotlinCompilerExtensionVersion '1.5.8'
     }
 
     packaging {
@@ -104,7 +98,7 @@ dependencies {
     implementation 'androidx.paging:paging-compose:3.2.1'
 
     // Security
-    implementation 'androidx.security:security-crypto:1.1.0'
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
 
     // Network
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
@@ -120,4 +114,31 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
+}
+
+// Ktlint configuration
+ktlint {
+    version = "0.50.0"
+    debug = true
+    verbose = true
+    android = true
+    outputToConsole = true
+    outputColorName = "RED"
+    ignoreFailures = false
+    enableExperimentalRules = true
+    additionalEditorconfigFile = file("${project.rootDir}/.editorconfig")
+}
+
+// Detekt configuration
+detekt {
+    toolVersion = "1.23.0"
+    config = files("${project.rootDir}/config/detekt/detekt.yml")
+    buildUponDefaultConfig = true
+    ignoreFailures = false
+    parallel = true
+    reports {
+        html.enabled = true
+        xml.enabled = true
+        txt.enabled = true
+    }
 }
