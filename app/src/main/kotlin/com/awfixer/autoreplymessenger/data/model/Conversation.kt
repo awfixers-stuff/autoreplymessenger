@@ -1,5 +1,4 @@
-autoreplyapp/app/src/main/kotlin/com/example/autoreplymessenger/data/model/Conversation.kt
-package com.example.autoreplymessenger.data.model
+package com.awfixer.autoreplymessenger.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

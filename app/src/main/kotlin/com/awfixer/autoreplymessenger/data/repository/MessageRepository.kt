@@ -1,12 +1,13 @@
-package com.example.autoreplymessenger.data.repository
+package com.awfixer.autoreplymessenger.data.repository
 
-import com.example.autoreplymessenger.data.dao.ConversationDao
-import com.example.autoreplymessenger.data.dao.MessageDao
-import com.example.autoreplymessenger.data.model.Conversation
-import com.example.autoreplymessenger.data.model.Message
+import com.awfixer.autoreplymessenger.data.dao.ConversationDao
+import com.awfixer.autoreplymessenger.data.dao.MessageDao
+import com.awfixer.autoreplymessenger.data.model.Conversation
+import com.awfixer.autoreplymessenger.data.model.Message
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 @Singleton
 class MessageRepository
@@ -48,13 +49,10 @@ constructor(private val messageDao: MessageDao, private val conversationDao: Con
 
     // Delete a message
     suspend fun deleteMessage(messageId: Long) {
-        // First, get the message to know the threadId
-        val message =
-                messageDao.getMessagesForThread(0).value?.find {
-                    it.id == messageId
-                } // This is inefficient, better to query by id
-        messageDao.deleteMessage(messageId)
+        // Get the message to know the threadId
+        val message = messageDao.getMessageById(messageId)
         if (message != null) {
+            messageDao.deleteMessage(messageId)
             updateConversationForMessage(message)
         }
     }
@@ -67,7 +65,7 @@ constructor(private val messageDao: MessageDao, private val conversationDao: Con
 
     // Helper function to update conversation based on message
     private suspend fun updateConversationForMessage(message: Message) {
-        val conversation = conversationDao.getConversationByThreadId(message.threadId).value
+        val conversation = conversationDao.getConversationByThreadId(message.threadId).first()
         if (conversation == null) {
             // Create new conversation
             val newConversation =

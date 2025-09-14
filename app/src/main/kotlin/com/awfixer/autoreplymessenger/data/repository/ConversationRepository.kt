@@ -1,7 +1,7 @@
-package com.example.autoreplymessenger.data.repository
+package com.awfixer.autoreplymessenger.data.repository
 
-import com.example.autoreplymessenger.data.dao.ConversationDao
-import com.example.autoreplymessenger.data.model.Conversation
+import com.awfixer.autoreplymessenger.data.dao.ConversationDao
+import com.awfixer.autoreplymessenger.data.model.Conversation
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow

@@ -1,11 +1,11 @@
-package com.example.autoreplymessenger.data.dao
+package com.awfixer.autoreplymessenger.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.autoreplymessenger.data.model.Conversation
+import com.awfixer.autoreplymessenger.data.model.Conversation
 import kotlinx.coroutines.flow.Flow
 
 @Dao
