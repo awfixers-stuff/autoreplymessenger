@@ -1,11 +1,3 @@
-<file_path>
-autoreplyapp/README.md
-</file_path>
-
-<edit_description>
-Update README.md to document CI/CD setup
-</edit_description>
-
 # AutoReplyMessenger
 
 [![Build Status](https://github.com/yourusername/AutoReplyMessenger/workflows/Build%20Android%20App/badge.svg)](https://github.com/yourusername/AutoReplyMessenger/actions)
