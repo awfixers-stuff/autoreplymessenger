@@ -1,4 +1,4 @@
-package com.example.autoreplymessenger.ui.theme
+package com.awfixer.autoreplymessenger.ui.theme
 
 import androidx.compose.material3.Typography
 

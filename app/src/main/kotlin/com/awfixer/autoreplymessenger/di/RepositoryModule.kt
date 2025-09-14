@@ -1,17 +1,17 @@
 <file_path>
-autoreplyapp/app/src/main/kotlin/com/example/autoreplymessenger/di/RepositoryModule.kt
+autoreplyapp/app/src/main/kotlin/com/awfixer/autoreplymessenger/di/RepositoryModule.kt
 </file_path>
 
 <edit_description>
-Create RepositoryModule.kt for Hilt
+Update package and imports in RepositoryModule.kt
 </edit_description>
 
-package com.example.autoreplymessenger.di
+package com.awfixer.autoreplymessenger.di
 
-import com.example.autoreplymessenger.data.dao.ConversationDao
-import com.example.autoreplymessenger.data.dao.MessageDao
-import com.example.autoreplymessenger.data.repository.ConversationRepository
-import com.example.autoreplymessenger.data.repository.MessageRepository
+import com.awfixer.autoreplymessenger.data.dao.ConversationDao
+import com.awfixer.autoreplymessenger.data.dao.MessageDao
+import com.awfixer.autoreplymessenger.data.repository.ConversationRepository
+import com.awfixer.autoreplymessenger.data.repository.MessageRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

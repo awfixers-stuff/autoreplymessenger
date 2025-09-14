@@ -1,11 +1,10 @@
-package com.example.autoreplymessenger.ui.composables
+package com.awfixer.autoreplymessenger.ui.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -18,8 +17,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.autoreplymessenger.data.model.Conversation
-import com.example.autoreplymessenger.ui.viewmodels.InboxViewModel
+import com.awfixer.autoreplymessenger.data.model.Conversation
+import com.awfixer.autoreplymessenger.ui.viewmodels.InboxViewModel
 
 @Composable
 fun InboxScreen(navController: NavController) {
@@ -32,14 +31,14 @@ fun InboxScreen(navController: NavController) {
                         title = { Text("Inbox") },
                         actions = {
                             IconButton(onClick = { /* TODO: Search */}) {
-                                Icon(Icons.Filled.Search, contentDescription = "Search")
+                                Icon(Search, contentDescription = "Search")
                             }
                         }
                 )
             },
             floatingActionButton = {
                 FloatingActionButton(onClick = { navController.navigate("compose") }) {
-                    Icon(Icons.Filled.Add, contentDescription = "Compose")
+                    Icon(Add, contentDescription = "Compose")
                 }
             }
     ) { padding ->

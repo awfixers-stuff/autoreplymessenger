@@ -1,11 +1,11 @@
-package com.example.autoreplymessenger.data.dao
+package com.awfixer.autoreplymessenger.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.autoreplymessenger.data.model.Message
+import com.awfixer.autoreplymessenger.data.model.Message
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -18,6 +18,9 @@ interface MessageDao {
     suspend fun insertMessages(messages: List<Message>)
 
     @Update suspend fun updateMessage(message: Message)
+
+    @Query("SELECT * FROM messages WHERE id = :messageId")
+    suspend fun getMessageById(messageId: Long): Message?
 
     @Query("SELECT * FROM messages WHERE threadId = :threadId ORDER BY timestamp DESC")
     fun getMessagesForThread(threadId: Long): Flow<List<Message>>

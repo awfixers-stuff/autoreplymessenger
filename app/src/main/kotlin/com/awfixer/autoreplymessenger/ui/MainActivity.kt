@@ -1,4 +1,4 @@
-package com.example.autoreplymessenger.ui
+package com.awfixer.autoreplymessenger.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.autoreplymessenger.ui.composables.InboxScreen
-import com.example.autoreplymessenger.ui.theme.AutoReplyMessengerTheme
+import com.awfixer.autoreplymessenger.ui.composables.InboxScreen
+import com.awfixer.autoreplymessenger.ui.theme.AutoReplyMessengerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
