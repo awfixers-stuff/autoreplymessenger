@@ -1,15 +1,25 @@
 {
-    "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.16.0/.schema/devbox.schema.json",
-    "packages": [],
-    "shell": {
-      "init_hook": [
-        "echo 'Welcome to devbox!' > /dev/null"
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.16.0/.schema/devbox.schema.json",
+  "packages": [
+    "openjdk17",
+    "gradle",
+    "kotlin",
+    "android-tools",
+    "ktlint",
+    "detekt"
+  ],
+  "shell": {
+    "init_hook": ["echo 'Welcome to Android development environment!'"],
+    "scripts": {
+      "build": ["./gradlew assembleDebug"],
+      "test": ["./gradlew testDebugUnitTest"],
+      "lint": [
+        "./gradlew ktlintCheck",
+        "./gradlew detekt",
+        "./gradlew lintDebug"
       ],
-      "scripts": {
-        "test": [
-          "echo \"Error: no test specified\" && exit 1"
-        ]
-      }
+      "clean": ["./gradlew clean"],
+      "deps": ["./gradlew dependencyUpdates"]
     }
   }
-  
+}
