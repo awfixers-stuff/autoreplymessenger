@@ -83,7 +83,7 @@ APP_NAME="Gradle"
 APP_BASE_NAME=${0##*/}
 
 # Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
-DEFAULT_JVM_OPTS='"-Xmx64m" "-Xms64m"'
+DEFAULT_JVM_OPTS='-Xmx64m -Xms64m'
 
 # Use the maximum available, or set MAX_FD != -1 to use that value.
 MAX_FD=maximum
@@ -115,20 +115,16 @@ CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
 
 # Determine the Java command to use to start the JVM.
-setJavaHome() {
-    # For Cygwin, ensure paths are in UNIX format before anything is touched.
-    if $cygwin ; then
-        [ -n "$JAVA_HOME" ] && JAVA_HOME=$( cygpath --unix "$JAVA_HOME" )
+if [ -n "$JAVA_HOME" ] ; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
+        # IBM's JDK on AIX uses strange locations for the executables
+        JAVACMD=$JAVA_HOME/jre/sh/java
+    else
+        JAVACMD=$JAVA_HOME/bin/java
     fi
-    COMMAND=$JAVA_HOME/bin/java
-    if [ ! -x "$COMMAND" ] ; then
-        die "ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME
-
-Please set the JAVA_HOME variable in your environment to match the
-
-location of your Java installation."
-    fi
-}
+else
+    JAVACMD=java
+fi
 
 # For Cygwin, switch paths to Windows format before running java
 if $cygwin ; then
@@ -153,13 +149,19 @@ if $nonstop ; then
     GRADLE_OPTS="$GRADLE_OPTS \"-Dorg.gradle.internal.native=true\""
 fi
 
+# Save the original positional parameters
+saved_args=("$@")
+
 # Split up the JVM_OPTS And GRADLE_OPTS values into an array, following the shell quoting and substitution rules
-eval splitJvmOpts() {
+eval 'splitJvmOpts() {
     JVM_OPTS=("$@")
-}
+}'
 
 eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS
 splitJvmOpts "$@"
+
+# Restore the original positional parameters
+set -- "${saved_args[@]}"
 
 # by default we should be in the correct project dir, but when run from Finder on Mac, the cwd is wrong
 cd "$APP_HOME" || exit
