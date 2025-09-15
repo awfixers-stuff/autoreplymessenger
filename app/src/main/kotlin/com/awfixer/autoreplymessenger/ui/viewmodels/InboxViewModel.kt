@@ -2,8 +2,8 @@ package com.awfixer.autoreplymessenger.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.awfixer.autoreplymessenger.data.model.Conversation
-import com.awfixer.autoreplymessenger.data.repository.ConversationRepository
+import com.awfixer.autoreplymessenger.data.model.ThreadEntity
+import com.awfixer.autoreplymessenger.data.repository.ThreadRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,22 +12,19 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class InboxViewModel
-@Inject
-constructor(private val conversationRepository: ConversationRepository) : ViewModel() {
+class InboxViewModel @Inject constructor(private val threadRepository: ThreadRepository) :
+        ViewModel() {
 
-    private val _conversations = MutableStateFlow<List<Conversation>>(emptyList())
-    val conversations: StateFlow<List<Conversation>> = _conversations
+    private val _threads = MutableStateFlow<List<ThreadEntity>>(emptyList())
+    val threads: StateFlow<List<ThreadEntity>> = _threads
 
     init {
-        loadConversations()
+        loadThreads()
     }
 
-    private fun loadConversations() {
+    private fun loadThreads() {
         viewModelScope.launch {
-            conversationRepository.getAllConversations().collectLatest { conversations ->
-                _conversations.value = conversations
-            }
+            threadRepository.getAllThreads().collectLatest { threads -> _threads.value = threads }
         }
     }
 }

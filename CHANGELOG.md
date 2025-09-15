@@ -31,6 +31,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `gradle.properties` with performance optimizations
 - Enhanced `.gitignore` with comprehensive Android project exclusions
 - Updated `README.md` with CI/CD documentation and badges
+- MMS support: Receive, parse, display, compose, and send MMS with images and text
+- Updated data models: MessageEntity, MmsPartEntity, ThreadEntity, DraftEntity
+- Domain layer: Use cases for ReceiveMms, ParseMmsPdu, IngestMmsIntoThread, SendMms
+- Workers: DownloadMmsWorker, SendMmsWorker for background processing
+- Utils: MmsPduParser, MmsRepository, ApnResolver, MmsHttpClient
+- UI updates: Compose screen with attachment picker, thumbnails, subject line
+- Permissions and APN handling for MMS
+- Robust error handling and retries with WorkManager
+
+### Iteration 2: MMS support
+- Implemented end-to-end MMS receive, parse, display, compose, and send
+- Preserved SMS workflows while adding MMS seamlessly to threading
+- Kept everything local-only and privacy-preserving
 
 ### Changed
 - Improved build configuration for better CI/CD performance

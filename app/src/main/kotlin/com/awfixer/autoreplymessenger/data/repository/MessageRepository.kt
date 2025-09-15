@@ -1,9 +1,11 @@
 package com.awfixer.autoreplymessenger.data.repository
 
-import com.awfixer.autoreplymessenger.data.dao.ConversationDao
 import com.awfixer.autoreplymessenger.data.dao.MessageDao
-import com.awfixer.autoreplymessenger.data.model.Conversation
-import com.awfixer.autoreplymessenger.data.model.Message
+import com.awfixer.autoreplymessenger.data.dao.ThreadDao
+import com.awfixer.autoreplymessenger.data.model.MessageBox
+import com.awfixer.autoreplymessenger.data.model.MessageEntity
+import com.awfixer.autoreplymessenger.data.model.MmsPartEntity
+import com.awfixer.autoreplymessenger.data.model.ThreadEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
@@ -12,39 +14,40 @@ import kotlinx.coroutines.flow.first
 @Singleton
 class MessageRepository
 @Inject
-constructor(private val messageDao: MessageDao, private val conversationDao: ConversationDao) {
+constructor(private val messageDao: MessageDao, private val threadDao: ThreadDao) {
 
-    // Insert a new message and update the corresponding conversation
-    suspend fun insertMessage(message: Message) {
+    // Insert a new message and update the corresponding thread
+    suspend fun insertMessage(message: MessageEntity): Long {
         val messageId = messageDao.insertMessage(message)
-        updateConversationForMessage(message)
+        updateThreadForMessage(message)
+        return messageId
     }
 
     // Insert multiple messages
-    suspend fun insertMessages(messages: List<Message>) {
+    suspend fun insertMessages(messages: List<MessageEntity>) {
         messageDao.insertMessages(messages)
-        messages.forEach { updateConversationForMessage(it) }
+        messages.forEach { updateThreadForMessage(it) }
     }
 
     // Get messages for a specific thread
-    fun getMessagesForThread(threadId: Long): Flow<List<Message>> {
+    fun getMessagesForThread(threadId: Long): Flow<List<MessageEntity>> {
         return messageDao.getMessagesForThread(threadId)
     }
 
     // Get all messages
-    fun getAllMessages(): Flow<List<Message>> {
+    fun getAllMessages(): Flow<List<MessageEntity>> {
         return messageDao.getAllMessages()
     }
 
     // Get unread messages
-    fun getUnreadMessages(): Flow<List<Message>> {
+    fun getUnreadMessages(): Flow<List<MessageEntity>> {
         return messageDao.getUnreadMessages()
     }
 
     // Update a message
-    suspend fun updateMessage(message: Message) {
+    suspend fun updateMessage(message: MessageEntity) {
         messageDao.updateMessage(message)
-        updateConversationForMessage(message)
+        updateThreadForMessage(message)
     }
 
     // Delete a message
@@ -53,45 +56,55 @@ constructor(private val messageDao: MessageDao, private val conversationDao: Con
         val message = messageDao.getMessageById(messageId)
         if (message != null) {
             messageDao.deleteMessage(messageId)
-            updateConversationForMessage(message)
+            messageDao.deleteMmsPartsForMessage(messageId)
+            updateThreadForMessage(message)
         }
     }
 
     // Delete all messages for a thread
     suspend fun deleteMessagesForThread(threadId: Long) {
         messageDao.deleteMessagesForThread(threadId)
-        conversationDao.deleteConversation(threadId)
+        threadDao.deleteThread(threadId)
     }
 
-    // Helper function to update conversation based on message
-    private suspend fun updateConversationForMessage(message: Message) {
-        val conversation = conversationDao.getConversationByThreadId(message.threadId).first()
-        if (conversation == null) {
-            // Create new conversation
-            val newConversation =
-                    Conversation(
-                            threadId = message.threadId,
-                            contactName = null, // TODO: Fetch from contacts
-                            contactNumber = message.sender,
-                            lastMessage = message.body,
-                            lastMessageTimestamp = message.timestamp,
-                            unreadCount = if (message.isIncoming && !message.isRead) 1 else 0,
-                            snippet = message.body.take(50)
+    // MMS Parts
+    suspend fun insertMmsPart(part: MmsPartEntity): Long {
+        return messageDao.insertMmsPart(part)
+    }
+
+    suspend fun insertMmsParts(parts: List<MmsPartEntity>) {
+        messageDao.insertMmsParts(parts)
+    }
+
+    suspend fun getMmsPartsForMessage(messageId: Long): List<MmsPartEntity> {
+        return messageDao.getMmsPartsForMessage(messageId)
+    }
+
+    // Helper function to update thread based on message
+    private suspend fun updateThreadForMessage(message: MessageEntity) {
+        val thread = threadDao.getThreadById(message.threadId).first()
+        if (thread == null) {
+            // Create new thread
+            val newThread =
+                    ThreadEntity(
+                            lastMessageSnippet = message.subject ?: message.body ?: "New message",
+                            lastTimestamp = message.date,
+                            participants = message.address,
+                            unreadCount = if (message.box == MessageBox.INBOX) 1 else 0
                     )
-            conversationDao.insertConversation(newConversation)
+            threadDao.insertThread(newThread)
         } else {
-            // Update existing conversation
-            val updatedConversation =
-                    conversation.copy(
-                            lastMessage = message.body,
-                            lastMessageTimestamp = message.timestamp,
+            // Update existing thread
+            val updatedThread =
+                    thread.copy(
+                            lastMessageSnippet = message.subject
+                                            ?: message.body ?: thread.lastMessageSnippet,
+                            lastTimestamp = message.date,
                             unreadCount =
-                                    if (message.isIncoming && !message.isRead)
-                                            conversation.unreadCount + 1
-                                    else conversation.unreadCount,
-                            snippet = message.body.take(50)
+                                    if (message.box == MessageBox.INBOX) thread.unreadCount + 1
+                                    else thread.unreadCount
                     )
-            conversationDao.updateConversation(updatedConversation)
+            threadDao.updateThread(updatedThread)
         }
     }
 }

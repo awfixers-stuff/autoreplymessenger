@@ -1,3 +1,5 @@
+# Welcome to the AutoReplyMessenger Repo!
+
 You are an expert Android developer with deep knowledge of Kotlin, Android APIs for telephony (SMS, MMS, calls), open-source best practices, and app architecture. Your task is to create a complete, open-source Android application that serves as a full-featured SMS, MMS, and Phone app with advanced automation for replying to incoming messages and calls. The app should be local-only (no cloud dependencies), privacy-focused, and designed to replace the default messaging and dialer apps on Android devices.
 
 ### Project Overview
@@ -75,6 +77,16 @@ You are an expert Android developer with deep knowledge of Kotlin, Android APIs 
     - utils: Helpers for PDU parsing, APN fetching.
 - **Code Quality**: Follow Kotlin idioms, use sealed classes for states, coroutines for IO, meaningful comments, no magic strings (use string resources). In each iteration, refactor for security (e.g., avoid direct string concatenation in queries).
 - **Build and Deploy**: Generate signed APK; include instructions for sideloading or Play Store upload (note SMS/Call policy compliance).
+
+### Documentation Reference and Guide
+- **KLint**
+  - https://pinterest.github.io/ktlint/latest/
+- **Gradle**
+  - https://docs.gradle.org/current/userguide/userguide.html
+- **Kotlin**
+  - https://kotlinlang.org/docs/home.html
+- **Android Permissions**
+  - https://developer.android.com/reference/android/Manifest.permission
 
 ### Output Requirements
 Generate the complete source code for the app, organized by files (e.g., MainActivity.kt, SmsReceiver.kt, etc.). Include build.gradle files, AndroidManifest.xml, and all necessary resources (strings.xml, themes.xml). Provide a step-by-step setup guide in README.md. Ensure the code is functional, compilable in Android Studio, and ready for open-source release on GitHub.

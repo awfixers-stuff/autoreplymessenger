@@ -1,7 +1,11 @@
 # AutoReplyMessenger
 
-[![Build Status](https://github.com/yourusername/AutoReplyMessenger/workflows/Build%20Android%20App/badge.svg)](https://github.com/yourusername/AutoReplyMessenger/actions)
-[![Code Quality](https://github.com/yourusername/AutoReplyMessenger/workflows/Kotlin%20Code%20Quality%20Check/badge.svg)](https://github.com/yourusername/AutoReplyMessenger/actions)
+This project is a WIP to create an open source varient of an app that I developed and use personally
+
+this project is made for entertainment reasons so work may be spotty
+
+[![Build Status](https://github.com/awfixer/AutoReplyMessenger/workflows/Build%20Android%20App/badge.svg)](https://github.com/awfixer/AutoReplyMessenger/actions)
+[![Code Quality](https://github.com/awfixer/AutoReplyMessenger/workflows/Kotlin%20Code%20Quality%20Check/badge.svg)](https://github.com/awfixer/AutoReplyMessenger/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 An open-source Android application that serves as a full-featured SMS, MMS, and Phone app with advanced automation for replying to incoming messages and calls.

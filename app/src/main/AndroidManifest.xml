@@ -6,28 +6,38 @@ autoreplyapp/app/src/main/AndroidManifest.xml
 Remove references to missing XML resource files
 </edit_description>
 
-<?xml version="1.0" encoding="utf-8" ?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.awfixer.autoreplymessenger"
->
+    package="com.awfixer.autoreplymessenger">
 
-    <!-- Permissions for SMS -->
+    <!-- Permissions for SMS and MMS -->
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.REQUEST_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_MMS" />
+    <uses-permission android:name="android.permission.SEND_MMS" />
 
-    <!-- Permissions for Contacts (to display contact names) -->
+    <!-- Permissions for Phone Calls -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+
+    <!-- Permissions for Contacts -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <!-- Permissions for Network (for potential future use) -->
+    <!-- Permissions for Network -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- Permissions for Wake Lock (for background tasks) -->
+    <!-- Permissions for Background Tasks -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Features -->
+    <uses-feature android:name="android.hardware.telephony" android:required="true" />
 
     <application
         android:name=".AutoReplyMessengerApplication"
@@ -36,14 +46,13 @@ Remove references to missing XML resource files
         android:supportsRtl="true"
         android:theme="@style/Theme.AutoReplyMessenger"
         android:usesCleartextTraffic="false"
-        tools:targetApi="31"
-    >
+        tools:targetApi="31">
 
+        <!-- Main Activity -->
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.AutoReplyMessenger"
-        >
+            android:theme="@style/Theme.AutoReplyMessenger">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -54,27 +63,48 @@ Remove references to missing XML resource files
         <receiver
             android:name=".services.SmsReceiver"
             android:exported="true"
-            android:permission="android.permission.BROADCAST_SMS"
-        >
+            android:permission="android.permission.BROADCAST_SMS">
             <intent-filter android:priority="1000">
-                <action
-                    android:name="android.provider.Telephony.SMS_RECEIVED"
-                />
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+                <action android:name="android.provider.Telephony.SMS_DELIVER" />
             </intent-filter>
         </receiver>
 
-        <!-- Work Manager -->
+        <!-- MMS Receiver -->
+        <receiver
+            android:name=".services.MmsReceiver"
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_WAP_PUSH">
+            <intent-filter android:priority="1000">
+                <action android:name="android.provider.Telephony.WAP_PUSH_RECEIVED" />
+                <data android:mimeType="application/vnd.wap.mms-message" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Phone State Receiver -->
+        <receiver
+            android:name=".services.PhoneStateReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter>
+        </receiver>
+
+        <!-- WorkManager Hilt Initialization -->
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
-            tools:node="merge"
-        >
+            tools:node="merge">
             <meta-data
                 android:name="androidx.work.WorkManagerInitializer"
                 android:value="androidx.startup"
-                tools:node="remove"
-            />
+                tools:node="remove" />
+            <meta-data
+                android:name="androidx.work.impl.WorkManagerInitializer"
+                android:value="DISABLED"
+                tools:node="remove" />
         </provider>
 
     </application>

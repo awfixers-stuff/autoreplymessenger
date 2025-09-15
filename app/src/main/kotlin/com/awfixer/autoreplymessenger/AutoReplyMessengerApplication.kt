@@ -1,15 +1,17 @@
-<file_path>
-autoreplyapp/app/src/main/kotlin/com/awfixer/autoreplymessenger/AutoReplyMessengerApplication.kt
-</file_path>
-
-<edit_description>
-Recreate AutoReplyMessengerApplication.kt with correct package
-</edit_description>
-
 package com.awfixer.autoreplymessenger
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 @HiltAndroidApp
-class AutoReplyMessengerApplication : Application()
+class AutoReplyMessengerApplication : Application() {
+
+    @Inject lateinit var workerFactory: HiltWorkerFactory
+
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder().setWorkerFactory(workerFactory).build()
+    }
+}

@@ -5,32 +5,34 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.awfixer.autoreplymessenger.data.model.Conversation
+import com.awfixer.autoreplymessenger.data.model.ThreadEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface ConversationDao {
+interface ThreadDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertConversation(conversation: Conversation)
+    suspend fun insertThread(thread: ThreadEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertConversations(conversations: List<Conversation>)
+    suspend fun insertThreads(threads: List<ThreadEntity>)
 
-    @Update suspend fun updateConversation(conversation: Conversation)
+    @Update suspend fun updateThread(thread: ThreadEntity)
 
-    @Query("SELECT * FROM conversations ORDER BY lastMessageTimestamp DESC")
-    fun getAllConversations(): Flow<List<Conversation>>
+    @Query("SELECT * FROM threads ORDER BY lastTimestamp DESC")
+    fun getAllThreads(): Flow<List<ThreadEntity>>
 
-    @Query("SELECT * FROM conversations WHERE threadId = :threadId")
-    fun getConversationByThreadId(threadId: Long): Flow<Conversation?>
+    @Query("SELECT * FROM threads WHERE id = :threadId")
+    fun getThreadById(threadId: Long): Flow<ThreadEntity?>
 
-    @Query("DELETE FROM conversations WHERE threadId = :threadId")
-    suspend fun deleteConversation(threadId: Long)
+    @Query("SELECT * FROM threads WHERE participants = :participants LIMIT 1")
+    suspend fun getThreadByParticipants(participants: String): ThreadEntity?
 
-    @Query("UPDATE conversations SET unreadCount = unreadCount + 1 WHERE threadId = :threadId")
+    @Query("DELETE FROM threads WHERE id = :threadId") suspend fun deleteThread(threadId: Long)
+
+    @Query("UPDATE threads SET unreadCount = unreadCount + 1 WHERE id = :threadId")
     suspend fun incrementUnreadCount(threadId: Long)
 
-    @Query("UPDATE conversations SET unreadCount = 0 WHERE threadId = :threadId")
+    @Query("UPDATE threads SET unreadCount = 0 WHERE id = :threadId")
     suspend fun markAsRead(threadId: Long)
 }
